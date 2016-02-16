@@ -4,8 +4,10 @@
 from array import array
 from operator import itemgetter
 from shutil import rmtree
-from os import mkdir, scandir
-from datetime import datetime, timedelta
+from os import mkdir, \
+               scandir
+from datetime import datetime, \
+                     timedelta
 import sys
 import threading
 import pickle
@@ -222,9 +224,21 @@ def sort_customer_file(customer_id):
     # sort by date
     ratings = sorted(ratings.items(), key=lambda r: r[1][1])
     with open(DATA_PATH + 'customer_data/c_' + str(customer_id).zfill(7)
-        + '.txt','w') as cf:
+              + '.txt','w') as cf:
         for m, r in ratings:
             print(str(m) + ',' + str(r[0]) + ',' + r[1], file=cf)
+
+
+def all_rating_dates():
+    dates = {}
+    for entry in scandir(DATA_PATH + '/customer_data'):
+        print(entry.name)
+        c = int(entry.name[2:9])
+        with open(entry.path,'r') as cf:
+            for l in cf.readlines():
+                m, _, d = l.strip().split(',')
+                dates[c] = {int(m):d}
+    return dates
 
 
 def all_movie_ages():
@@ -259,11 +273,13 @@ def coalesce_movie_data():
 def coalesce_customer_data():
     avgcr = load_pickle('avgcr')
     cmap = load_pickle('cmap')
+    ard = load_pickle('ard')
 
     customer_data = {}
     for c in avgcr.keys():
         customer_data[c] = {'avg_rating':avgcr[c],
-                            'cmap':cmap[c]}
+                            'trend':cmap[c],
+                            'rating_dates':ard[c]}
     return customer_data
 
 
@@ -334,6 +350,8 @@ if __name__ == '__main__':
             write_pickle(all_avg_customer_ratings(), 'avgcr')
         elif '-cmap' in args:
             write_pickle(movie_age_preferences(), 'cmap')
+        elif '-ard' in args:
+            write_pickle(all_rating_dates(), 'ard')
         elif '-co' in args:
             write_pickle(coalesce_movie_data(), 'mov')
             write_pickle(coalesce_customer_data(), 'cust')
@@ -346,4 +364,4 @@ if __name__ == '__main__':
         print('Done.')
     else:
         print('usage: python3 CacheBuilder.py <-m2c,-scf,-ma,-avgmr,-amrot,'
-              + '-avgcr,-cmap,-co,-a>')
+              + '-avgcr,-cmap,-ard,-co,-a>')
