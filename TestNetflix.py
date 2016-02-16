@@ -7,24 +7,24 @@
 # -------
 # imports
 # -------
-from io       import StringIO
-from unittest import main, TestCase
+from io import StringIO
+from unittest import main, \
+                     TestCase
 
-from Netflix  import  \
-  function_1,       \
-  # function_2,       \
-  # function_3
+from Netflix import \
+  netflix_solve
+
 
 # -----------
 # TestNetflix
 # -----------
 class TestNetflix(TestCase):
-  # ----------
-  # function_1
-  # ----------
+  # -------------
+  # netflix_solve
+  # -------------
 
   # test desc
-  def test_function_1_1(self):
+  def test_netflix_solve_1(self):
     pass
     # s    = "1 10\n"
     # i, j = netflix_read(s)
@@ -32,7 +32,7 @@ class TestNetflix(TestCase):
     # self.assertEqual(j, 10)
 
   # empty input. should skip and keep going.
-  def test_function_1_2(self):
+  def test_netflix_solve_2(self):
     pass
     # s    = ""
     # self.assertRaises(ValueError, collatz_read, s)
