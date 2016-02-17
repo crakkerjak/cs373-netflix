@@ -88,10 +88,12 @@ def fetch_ratings_for_movie(movie_id):
     with open(DATA_PATH + 'training_set/mv_' + str(movie_id).zfill(7)
               + '.txt','r') as mv:
         ratings = {}
-        for l in mv.readlines()[1:]:
+        lines = iter(mv.readlines())
+        next(lines)
+        for l in lines:
             c, r, d = l.strip().split(',')
             ratings[int(c)] = (int(r), d)
-            return ratings
+        return ratings
 
 
 def convert_training_set():
@@ -169,6 +171,7 @@ def fetch_ratings_for_customer(customer_id):
               + '.txt','r') as cf:
         ratings = {}
         for l in cf.readlines():
+            print(l)
             m, r, d = l.strip().split(',')
             ratings[int(m)] = (int(r), d)
     return ratings
@@ -300,8 +303,7 @@ def answers():
                 ratings = fetch_ratings_for_movie(movie_id)
                 answers[movie_id] = {}
             else: # line is customer_id, add rating to dict
-                c = int(l)
-                answers[movie_id][c] = ratings[c][0]
+                answers[movie_id][l] = ratings[int(l)][0]
     return answers
 
 
@@ -358,9 +360,7 @@ if __name__ == '__main__':
         elif '-a' in args:
             write_pickle(answers(), 'a')
         elif '-test' in args:
-            amrt = load_pickle('amrt')
-            print(type(amrt))
-            print(sorted(amrt.keys()))
+            fetch_ratings_for_movie(1)
         print('Done.')
     else:
         print('usage: python3 CacheBuilder.py <-m2c,-scf,-ma,-avgmr,-amrot,'
