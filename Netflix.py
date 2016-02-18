@@ -45,17 +45,23 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
     ratings = []
     for customer_id in customer_ids:
         m_ofs = movie_offset(movie_id, customer_id, movie_data, cust_data)
-        c_ofs = movie_offset(movie_id, customer_id, movie_data, cust_data)
+        c_ofs = customer_offset(movie_id, customer_id, movie_data, cust_data)
         ratings.append(TRAINING_SET_AVG + m_ofs + c_ofs)
     return ratings
 
 
 def movie_offset(movie_id, customer_id, movie_data, cust_data):
-    return 0
+    movie_avg = movie_data[int(movie_id[:-1])]['avg_rating']
+    # print('movie_avg: ' + str(movie_avg))
+    # print('m_ofs: ' + str(movie_avg - TRAINING_SET_AVG))
+    return movie_avg - TRAINING_SET_AVG
 
 
 def customer_offset(movie_id, customer_id, movie_data, cust_data):
-    return 0
+    cust_avg = cust_data[int(customer_id)]['avg_rating']
+    # print('cust_avg: ' + str(cust_avg))
+    # print('c_ofs: ' + str(cust_avg - TRAINING_SET_AVG))
+    return  cust_avg - TRAINING_SET_AVG
 
 
 def netflix_print(movie_id, customer_ids, ratings, o_stream):
@@ -75,8 +81,9 @@ def netflix_print(movie_id, customer_ids, ratings, o_stream):
 
     o_stream.write(movie_id + '\n')
     for customer_id, rating in zip(customer_ids, ratings):
-        o_stream.write(str(rating) + '\n')
-        calculated_ratings.append((movie_id, customer_id, rating))
+        rating = '{:.1f}'.format(rating)
+        o_stream.write(rating + '\n')
+        calculated_ratings.append((movie_id, customer_id, float(rating)))
 
 
 def print_rmse(o_stream):
