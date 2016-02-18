@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 # -------------------------------
-# projects/collatz/TestCollatz.py
+# netflix/TestNetflix.py
+# Copyrights (C) are for the weak
+# Chris A. Timaeus
 # -------------------------------
 
 # -------

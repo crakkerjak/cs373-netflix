@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-# ------------------------------
-# projects/netflix/RunNetflix.py
-# ------------------------------
+# -------------------------------
+# netflix/RunNetflix.py
+# Copyrights (C) are for the weak
+# Chris A. Timaeus
+# -------------------------------
 
 # -------
 # imports

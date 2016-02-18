@@ -301,9 +301,9 @@ def answers():
             if l[-1] == ':': # line is a movie_id
                 movie_id = l[:-1]
                 ratings = fetch_ratings_for_movie(movie_id)
-                answers[movie_id] = {}
+                answers[movie_id + ':'] = {}
             else: # line is customer_id, add rating to dict
-                answers[movie_id][l] = ratings[int(l)][0]
+                answers[movie_id + ':'][l] = ratings[int(l)][0]
     return answers
 
 

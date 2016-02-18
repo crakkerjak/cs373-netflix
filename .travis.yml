@@ -12,6 +12,7 @@ install:
     - pip --version
     - pip install coverage
     - pip install numpy
+    - pip install requests
 
 before_script:
     - uname -a
