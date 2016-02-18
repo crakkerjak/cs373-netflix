@@ -17,12 +17,15 @@ from numpy import mean, \
 
 CACHE_LOC = '/u/downing/public_html/netflix-caches/'
 CACHE_URL = 'http://www.cs.utexas.edu/users/downing/netflix-caches/'
-ANSWER_PICKLE =  'cat3263-a.pickle'
+ANSWER_PICKLE = 'cat3263-a.pickle'
+MOVIE_PICKLE = 'cat3263-mov.pickle'
+CUSTOMER_PICKLE = 'cat3263-cust.pickle'
+TRAINING_SET_AVG = 3.604289964420661
 
 calculated_ratings = []
 
 
-def netflix_predict(movie_id, customer_ids):
+def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
     """Predicts ratings for one movie and a list of customer_ids
 
     Simple implementation: for each customer, just returns the same arbitrary
@@ -34,15 +37,25 @@ def netflix_predict(movie_id, customer_ids):
         customer_ids: A list of customer_id's, again in string format.
 
     Returns:
-        A list floats, the predicted ratings rounded to 1/10th of a star
+        A list of floats, the predicted ratings rounded to 1/10th of a star
         predicted. For example:
 
         [3.0, 3.4, 4.0]
     """
     ratings = []
     for customer_id in customer_ids:
-        ratings.append(3.5)
+        m_ofs = movie_offset(movie_id, customer_id, movie_data, cust_data)
+        c_ofs = movie_offset(movie_id, customer_id, movie_data, cust_data)
+        ratings.append(TRAINING_SET_AVG + m_ofs + c_ofs)
     return ratings
+
+
+def movie_offset(movie_id, customer_id, movie_data, cust_data):
+    return 0
+
+
+def customer_offset(movie_id, customer_id, movie_data, cust_data):
+    return 0
 
 
 def netflix_print(movie_id, customer_ids, ratings, o_stream):
@@ -81,7 +94,6 @@ def print_rmse(o_stream):
         with open(CACHE_LOC + ANSWER_PICKLE, 'rb') as answer_file:
             answers = load(answer_file)
     else:
-        # answers = loads(get(CACHE_URL + ANSWER_PICKLE).content)
         answers = loads(urlopen(CACHE_URL + ANSWER_PICKLE).read())
 
     # format data for rmse calculation
@@ -110,6 +122,24 @@ def rmse (nums_1, nums_2) :
     return sqrt(mean(square(subtract(nums_1, nums_2))))
 
 
+def load_data():
+    movie_data = {}
+    cust_data = {}
+    # load movie data cache
+    if isfile(CACHE_LOC + MOVIE_PICKLE):
+        with open(CACHE_LOC + MOVIE_PICKLE, 'rb') as movie_file:
+            movie_data = load(movie_file)
+    else:
+        movie_data = loads(urlopen(CACHE_URL + MOVIE_PICKLE).read())
+    # load customer data cache
+    if isfile(CACHE_LOC + CUSTOMER_PICKLE):
+        with open(CACHE_LOC + CUSTOMER_PICKLE, 'rb') as cust_file:
+            cust_data = load(cust_file)
+    else:
+        cust_data = loads(urlopen(CACHE_URL + CUSTOMER_PICKLE).read())
+    return(movie_data, cust_data)
+
+
 def netflix_solve(i_stream, o_stream):
     """Creates prediction output for any valid input for the Netflix Prize
     problem.
@@ -123,21 +153,30 @@ def netflix_solve(i_stream, o_stream):
     assert hasattr(o_stream, 'write')
 
     customer_ids = []
+    movie_data, cust_data = load_data()
+    # parse input
     for line in i_stream:
         line = line.strip()
         if line[-1] == ':':
             if len(customer_ids) > 0:
+                # see the future (or the past, actually)
+                predictions = netflix_predict(movie_id, customer_ids,
+                                              movie_data, cust_data)
+                # print current movie's output
                 netflix_print(movie_id,
                               customer_ids,
-                              netflix_predict(movie_id, customer_ids),
+                              predictions,
                               o_stream)
             movie_id = line
             customer_ids = []
         else:
             customer_ids.append(line)
-
+    # predict ratings for final movie
+    predictions = netflix_predict(movie_id, customer_ids,
+                                  movie_data, cust_data)
+    # print final movie's output
     netflix_print(movie_id,
                   customer_ids,
-                  netflix_predict(movie_id, customer_ids),
+                  predictions,
                   o_stream)
     print_rmse(o_stream)
