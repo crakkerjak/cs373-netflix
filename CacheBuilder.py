@@ -211,11 +211,11 @@ def coalesce_movie_data():
 
 
 def coalesce_customer_data():
-    avgcr = load_pickle('avgcr')
+    avgcr = load_pickle('avgcr') # average customer rating
     caby = load_pickle('caby')
 
     customer_data = {}
-    for c in avgcr.keys():
+    for c in avgcr:
         customer_data[c] = {'avgr':avgcr[c],
                             'caby':caby[c]}
     return customer_data
