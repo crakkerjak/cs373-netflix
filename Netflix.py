@@ -46,8 +46,8 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
     for customer_id in customer_ids:
         # ---------------------------------------------------------------------
         # these 3 lines yield a 0.97 RMSE on probe.txt:
-        # m_ofs = movie_offset(movie_id, customer_id, movie_data, cust_data)
-        # c_ofs = customer_offset(movie_id, customer_id, movie_data, cust_data)
+        # m_ofs = movie_data[movie_id]['avgr'] - TRAINING_SET_AVG
+        # c_ofs = cust_data[customer_id]['avgr'] - TRAINING_SET_AVG
         # ratings.append(TRAINING_SET_AVG + m_ofs + c_ofs)
         # ---------------------------------------------------------------------
         # ---------------------------------------------------------------------
@@ -58,20 +58,14 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
         year = movie_data[movie_id]['year']
         customer_average_that_year = cust_data[int(customer_id)]['caby'][year]
         if year != -1:
-            ratings.append(customer_average_that_year)
+            caby = customer_average_that_year
         else:
-            ratings.append(movie_data[movie_id]['avgr'])
+            caby = movie_data[movie_id]['avgr']
+        # time to beat: 50/50 or 70/30 at 0.8562 on probe.txt
+        ratings.append(0.50 * caby +
+                       0.50 * movie_data[movie_id]['avgr']) # now replace this with 'maby'
+                    #    0.30 * cust_data[customer_id]['avgr'])
     return ratings
-
-
-# def movie_offset(movie_id, customer_id, movie_data, cust_data):
-#     movie_avg = movie_data[int(movie_id[:-1])]['avgr']
-#     return movie_avg - TRAINING_SET_AVG
-#
-#
-# def customer_offset(movie_id, customer_id, movie_data, cust_data):
-#     cust_avg = cust_data[int(customer_id)]['avgr']
-#     return  cust_avg - TRAINING_SET_AVG
 
 
 def netflix_print(movie_id, customer_ids, ratings, o_stream):
@@ -89,10 +83,10 @@ def netflix_print(movie_id, customer_ids, ratings, o_stream):
     """
     global calculated_ratings
 
-    o_stream.write(movie_id + ':\n')
+    o_stream.write(str(movie_id) + ':\n')
     for customer_id, rating in zip(customer_ids, ratings):
         rating = '{:.1f}'.format(rating)
-        o_stream.write(rating + '\n')
+        o_stream.write(str(rating) + '\n')
         calculated_ratings.append((movie_id, customer_id, float(rating)))
 
 
@@ -121,7 +115,7 @@ def print_rmse(o_stream):
 
     # calculate, format and output rmse
     error = rmse(data[0], data[1])
-    o_stream.write('RMSE: ' + '{:.2f}'.format(error) + '\n')
+    o_stream.write('RMSE: ' + '{:.20f}'.format(error) + '\n')
 
 
 def rmse (nums_1, nums_2) :
@@ -180,20 +174,14 @@ def netflix_solve(i_stream, o_stream):
                 predictions = netflix_predict(movie_id, customer_ids,
                                               movie_data, cust_data)
                 # print current movie's output
-                netflix_print(movie_id,
-                              customer_ids,
-                              predictions,
-                              o_stream)
-            movie_id = line[:-1]
+                netflix_print(movie_id, customer_ids, predictions, o_stream)
+            movie_id = int(line[:-1])
             customer_ids = []
         else:
-            customer_ids.append(line)
+            customer_ids.append(int(line))
     # predict ratings for final movie
     predictions = netflix_predict(movie_id, customer_ids,
                                   movie_data, cust_data)
     # print final movie's output
-    netflix_print(movie_id,
-                  customer_ids,
-                  predictions,
-                  o_stream)
+    netflix_print(movie_id, customer_ids, predictions, o_stream)
     print_rmse(o_stream)
