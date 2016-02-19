@@ -18,8 +18,8 @@ from numpy import mean, \
 CACHE_LOC = '/u/downing/public_html/netflix-caches/'
 CACHE_URL = 'http://www.cs.utexas.edu/users/downing/netflix-caches/'
 ANSWER_PICKLE = 'cat3263-a.pickle'
-MOVIE_PICKLE = 'cat3263-mov.pickle'
-CUSTOMER_PICKLE = 'cat3263-cust.pickle'
+MOVIE_PICKLE = 'cat3263-mov-2.pickle'
+CUSTOMER_PICKLE = 'cat3263-cust-2.pickle'
 TRAINING_SET_AVG = 3.604289964420661
 
 calculated_ratings = []
@@ -52,15 +52,11 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
 
 def movie_offset(movie_id, customer_id, movie_data, cust_data):
     movie_avg = movie_data[int(movie_id[:-1])]['avg_rating']
-    # print('movie_avg: ' + str(movie_avg))
-    # print('m_ofs: ' + str(movie_avg - TRAINING_SET_AVG))
     return movie_avg - TRAINING_SET_AVG
 
 
 def customer_offset(movie_id, customer_id, movie_data, cust_data):
     cust_avg = cust_data[int(customer_id)]['avg_rating']
-    # print('cust_avg: ' + str(cust_avg))
-    # print('c_ofs: ' + str(cust_avg - TRAINING_SET_AVG))
     return  cust_avg - TRAINING_SET_AVG
 
 

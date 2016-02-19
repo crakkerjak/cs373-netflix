@@ -8,6 +8,7 @@ from os import mkdir, \
                scandir
 from datetime import datetime, \
                      timedelta
+from functools import reduce
 import sys
 import threading
 import pickle
@@ -38,47 +39,6 @@ def avg_movie_rating(ratings):
     for c in ratings:
         s += ratings[c][0]
     return s / len(ratings)
-
-
-def all_movie_rating_trends():
-    ratings_over_time = {}
-    for entry in scandir(DATA_PATH + '/training_set'):
-        print(entry.name)
-        with open(entry.path) as f:
-            m, *ratings = f.readlines()
-            r = []
-            for l in ratings:
-                _, rating, date = l.strip().split(',')
-                r.append((int(rating), date))
-            ratings_over_time[int(m.strip()[:-1])] = movie_ratings_trend(r)
-    return ratings_over_time
-
-
-def movie_ratings_trend(ratings):
-    x_intercept = datetime.strptime('2005-12-31', '%Y-%m-%d')
-    ratings.sort(key=itemgetter(1))
-    sample_size = max(len(ratings) // 10, 1)
-    oldest = ratings[0:sample_size]
-    newest = ratings[len(ratings) - sample_size:len(ratings)]
-    x1 = average_date(oldest)
-    y1 = sum(r[0] for r in oldest) / sample_size
-    x2 = average_date(newest)
-    y2 = sum(r[0] for r in newest) / sample_size
-    if x1 == x2:
-        slope = 0
-    else:
-        slope = (y2 - y1) / (x2 - x1).days
-        y_intercept = y2 + slope * (x_intercept - x2).days
-    return (slope, y_intercept)
-
-
-def average_date(ratings):
-    if len(ratings) == 1:
-        return datetime.strptime(ratings[0][1], '%Y-%m-%d')
-    dates = [datetime.strptime(r[1], '%Y-%m-%d') for r in ratings]
-    deltas = [dates[i] - dates[0] for i in range(1, len(dates))]
-    avg_delta = sum(deltas, timedelta(0)) / len(deltas)
-    return dates[0] + avg_delta
 
 
 def fetch_ratings_for_movie(movie_id):
@@ -176,38 +136,6 @@ def fetch_ratings_for_customer(customer_id):
             ratings[int(m)] = (int(r), d)
     return ratings
 
-def movie_age_preferences():
-    '''
-    stores a line in point-slope form based on a the oldest and newest movies
-    a customer has reviewed
-    dict format: {customer_id:(slope, calc'd rating at x_intercept)}
-    '''
-    age_preferences = {}
-    x_intercept = 2005
-    ma = load_pickle('ma')
-    for entry in scandir(DATA_PATH + '/customer_data'):
-        c = int(entry.name[2:9])
-        ratings = fetch_ratings_for_customer(c)
-        ra = []
-        for m in ratings.keys():
-            if not ma[m] == -1 :
-                ra.append((ma[m],ratings[m][0]))
-        ra = sorted(ra, reverse=True)
-        sample_size = max(len(ra) // 10, 1)
-        oldest = ra[0:sample_size]
-        newest = ra[len(ra) - sample_size:len(ra)]
-        x1 = sum(r[0] for r in oldest) / sample_size
-        y1 = sum(r[1] for r in oldest) / sample_size
-        x2 = sum(r[0] for r in newest) / sample_size
-        y2 = sum(r[1] for r in newest) / sample_size
-        if x1 == x2:
-            slope = 0
-        else:
-            slope = (y2 - y1) / (x1 - x2)
-        y_intercept = x2 * slope + y2
-        age_preferences[c] = (slope, y_intercept)
-    return age_preferences
-
 
 def sort_all_customer_files():
     '''
@@ -232,57 +160,64 @@ def sort_customer_file(customer_id):
             print(str(m) + ',' + str(r[0]) + ',' + r[1], file=cf)
 
 
-def all_rating_dates():
-    dates = {}
+def customer_avg_by_year():
+    release_years = load_pickle('amry')
+    avgs = {}
     for entry in scandir(DATA_PATH + '/customer_data'):
         print(entry.name)
         c = int(entry.name[2:9])
         with open(entry.path,'r') as cf:
+            ratings = {}
             for l in cf.readlines():
-                m, _, d = l.strip().split(',')
-                dates[c] = {int(m):d}
-    return dates
+                movie_id, rating, _ = l.strip().split(',')
+                rating = int(rating)
+                year = str(release_years[int(movie_id)])
+                if year in ratings: # this isn't working
+                    ratings[year].append(rating)
+                else:
+                    ratings[year] = [rating]
+            for year in ratings:
+                ratings[year] = reduce(lambda m, n: m + n,
+                                    ratings[year]) / len(ratings[year])
+            avgs[c] = ratings
+    return avgs
 
 
-def all_movie_ages():
+def all_movie_release_years():
     '''
-    returns movie ages (in 2005) in an array, index with movie_id
+    returns movie release years in an array, index with movie_id
     movies with no age in movie_titles.txt have a value of -1
     '''
     with open(DATA_PATH + 'movie_titles.txt', 'r') as f:
-        ages = array('i',[0])
+        release_years = array('i',[0])
         for l in f.readlines():
-            age = l.split(',')[1]
-            if age.isdigit():
-                ages.append(2005 - int(age))
+            release_year = l.split(',')[1]
+            if release_year.isdigit():
+                release_years.append(int(release_year))
             else:
-                ages.append(-1)
-        return ages
+                release_years.append(-1)
+    return release_years
 
 
 def coalesce_movie_data():
-    ma = load_pickle('ma')
-    avgmr = load_pickle('avgmr')
-    amrt = load_pickle('amrt')
+    amry = load_pickle('amry') # all movie release years
+    avgmr = load_pickle('avgmr') # average movie ratings
 
     movie_data = {}
     for m in range(1, 17771):
-        movie_data[m] = {'age':ma[m],
-                         'avg_rating':avgmr[m],
-                         'trend':amrt[m]}
+        movie_data[m] = {'year':amry[m],
+                         'avgr':avgmr[m]}
     return movie_data
 
 
 def coalesce_customer_data():
     avgcr = load_pickle('avgcr')
-    cmap = load_pickle('cmap')
-    ard = load_pickle('ard')
+    caby = load_pickle('caby')
 
     customer_data = {}
     for c in avgcr.keys():
-        customer_data[c] = {'avg_rating':avgcr[c],
-                            'trend':cmap[c],
-                            'rating_dates':ard[c]}
+        customer_data[c] = {'avgr':avgcr[c],
+                            'caby':caby[c]}
     return customer_data
 
 
@@ -342,20 +277,17 @@ if __name__ == '__main__':
             convert_training_set()
         elif '-scf' in args:
             sort_all_customer_files()
-        elif '-ma' in args:
-            write_pickle(all_movie_ages(), 'ma')
+        elif '-amry' in args:
+            write_pickle(all_movie_release_years(), 'amry')
         elif '-avgmr' in args:
             write_pickle(all_avg_movie_ratings(), 'avgmr')
-        elif '-amrt' in args:
-            write_pickle(all_movie_rating_trends(), 'amrt')
         elif '-avgcr' in args:
             write_pickle(all_avg_customer_ratings(), 'avgcr')
-        elif '-cmap' in args:
-            write_pickle(movie_age_preferences(), 'cmap')
-        elif '-ard' in args:
-            write_pickle(all_rating_dates(), 'ard')
-        elif '-co' in args:
+        elif '-caby' in args:
+            write_pickle(customer_avg_by_year(), 'caby')
+        elif '-com' in args:
             write_pickle(coalesce_movie_data(), 'mov')
+        elif '-coc' in args:
             write_pickle(coalesce_customer_data(), 'cust')
         elif '-a' in args:
             write_pickle(answers(), 'a')
@@ -363,5 +295,5 @@ if __name__ == '__main__':
             fetch_ratings_for_movie(1)
         print('Done.')
     else:
-        print('usage: python3 CacheBuilder.py <-m2c,-scf,-ma,-avgmr,-amrot,'
-              + '-avgcr,-cmap,-ard,-co,-a>')
+        print('usage: python3 CacheBuilder.py <-m2c,-scf,-amry,-avgmr,'
+              + '-avgcr,-rby,-com,-coc,-a>')
