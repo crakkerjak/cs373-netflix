@@ -171,8 +171,8 @@ def customer_avg_by_year():
             for l in cf.readlines():
                 movie_id, rating, _ = l.strip().split(',')
                 rating = int(rating)
-                year = str(release_years[int(movie_id)])
-                if year in ratings: # this isn't working
+                year = release_years[int(movie_id)]
+                if year in ratings:
                     ratings[year].append(rating)
                 else:
                     ratings[year] = [rating]

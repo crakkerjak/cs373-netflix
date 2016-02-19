@@ -46,17 +46,18 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
     for customer_id in customer_ids:
         m_ofs = movie_offset(movie_id, customer_id, movie_data, cust_data)
         c_ofs = customer_offset(movie_id, customer_id, movie_data, cust_data)
-        ratings.append(TRAINING_SET_AVG + m_ofs + c_ofs)
+        # ratings.append(TRAINING_SET_AVG + m_ofs + c_ofs)
+        ratings.append(cust_data['caby'][movie_data[movie_id]['year']])
     return ratings
 
 
 def movie_offset(movie_id, customer_id, movie_data, cust_data):
-    movie_avg = movie_data[int(movie_id[:-1])]['avg_rating']
+    movie_avg = movie_data[int(movie_id[:-1])]['avgr']
     return movie_avg - TRAINING_SET_AVG
 
 
 def customer_offset(movie_id, customer_id, movie_data, cust_data):
-    cust_avg = cust_data[int(customer_id)]['avg_rating']
+    cust_avg = cust_data[int(customer_id)]['avgr']
     return  cust_avg - TRAINING_SET_AVG
 
 
