@@ -7,7 +7,6 @@
 # -------------------------------
 from os.path import isfile
 from urllib.request import urlopen
-# from requests import get
 from pickle import load, \
                    loads
 from numpy import mean, \
@@ -28,8 +27,9 @@ calculated_ratings = []
 def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
     """Predicts ratings for one movie and a list of customer_ids
 
-    Simple implementation: for each customer, just returns the same arbitrary
-    rating for every (movie, customer).
+    Uses the customer_average, by year if a vailable, offset by the difference
+    between the average rating across the entire training_set and the average
+    rating for the movie.
 
     Args:
         movie_id: A movie id number in string format, including a colon at the
@@ -52,16 +52,15 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
         # ---------------------------------------------------------------------
         # ---------------------------------------------------------------------
         # but this one gets 0.90 :)
-        # ratings.append(cust_data[int(customer_id)]['caby'][movie_data[int(movie_id[:-1])]['year']])
+        # ratings.append(cust_data[customer_id]['caby'][movie_data[movie_id]['year']])
         # ---------------------------------------------------------------------
         # ---------------------------------------------------------------------
         # and these get 0.83309598542714313751
-        movie_id = int(movie_id)
-        year = movie_data[movie_id]['year']
-        if year != -1:
-            customer_average = cust_data[int(customer_id)]['caby'][year]
+        release_year = movie_data[movie_id]['year']
+        if release_year != -1: # release year was NULL in training_set
+            customer_average = cust_data[customer_id]['caby'][release_year]
         else:
-            customer_average = cust_data[customer_id]['avgr'] # was movie_data[movie_id]['avgr'] - same result
+            customer_average = cust_data[customer_id]['avgr']
         ratings.append(customer_average +
                        movie_data[movie_id]['avgr'] - TRAINING_SET_AVG)
     return ratings

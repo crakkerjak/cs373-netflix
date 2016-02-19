@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module Netflix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Netflix</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/admin/Documents/cs373/netflix/Netflix.py">/Users/admin/Documents/cs373/netflix/Netflix.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;-------------------------------<br>
+#&nbsp;netflix/Netflix.py<br>
+#&nbsp;Copyrights&nbsp;(C)&nbsp;are&nbsp;for&nbsp;the&nbsp;weak<br>
+#&nbsp;Chris&nbsp;A.&nbsp;Timaeus<br>
+#&nbsp;-------------------------------</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-load"><strong>load</strong></a>(file, *, fix_imports=True, encoding='ASCII', errors='strict')</dt><dd><tt>Read&nbsp;and&nbsp;return&nbsp;an&nbsp;object&nbsp;from&nbsp;the&nbsp;pickle&nbsp;data&nbsp;stored&nbsp;in&nbsp;a&nbsp;file.<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;equivalent&nbsp;to&nbsp;``Unpickler(file).<a href="#-load">load</a>()``,&nbsp;but&nbsp;may&nbsp;be&nbsp;more<br>
+efficient.<br>
+&nbsp;<br>
+The&nbsp;protocol&nbsp;version&nbsp;of&nbsp;the&nbsp;pickle&nbsp;is&nbsp;detected&nbsp;automatically,&nbsp;so&nbsp;no<br>
+protocol&nbsp;argument&nbsp;is&nbsp;needed.&nbsp;&nbsp;Bytes&nbsp;past&nbsp;the&nbsp;pickled&nbsp;object's<br>
+representation&nbsp;are&nbsp;ignored.<br>
+&nbsp;<br>
+The&nbsp;argument&nbsp;*file*&nbsp;must&nbsp;have&nbsp;two&nbsp;methods,&nbsp;a&nbsp;read()&nbsp;method&nbsp;that&nbsp;takes<br>
+an&nbsp;integer&nbsp;argument,&nbsp;and&nbsp;a&nbsp;readline()&nbsp;method&nbsp;that&nbsp;requires&nbsp;no<br>
+arguments.&nbsp;&nbsp;Both&nbsp;methods&nbsp;should&nbsp;return&nbsp;bytes.&nbsp;&nbsp;Thus&nbsp;*file*&nbsp;can&nbsp;be&nbsp;a<br>
+binary&nbsp;file&nbsp;object&nbsp;opened&nbsp;for&nbsp;reading,&nbsp;an&nbsp;io.BytesIO&nbsp;object,&nbsp;or&nbsp;any<br>
+other&nbsp;custom&nbsp;object&nbsp;that&nbsp;meets&nbsp;this&nbsp;interface.<br>
+&nbsp;<br>
+Optional&nbsp;keyword&nbsp;arguments&nbsp;are&nbsp;*fix_imports*,&nbsp;*encoding*&nbsp;and&nbsp;*errors*,<br>
+which&nbsp;are&nbsp;used&nbsp;to&nbsp;control&nbsp;compatiblity&nbsp;support&nbsp;for&nbsp;pickle&nbsp;stream<br>
+generated&nbsp;by&nbsp;Python&nbsp;2.&nbsp;&nbsp;If&nbsp;*fix_imports*&nbsp;is&nbsp;True,&nbsp;pickle&nbsp;will&nbsp;try&nbsp;to<br>
+map&nbsp;the&nbsp;old&nbsp;Python&nbsp;2&nbsp;names&nbsp;to&nbsp;the&nbsp;new&nbsp;names&nbsp;used&nbsp;in&nbsp;Python&nbsp;3.&nbsp;&nbsp;The<br>
+*encoding*&nbsp;and&nbsp;*errors*&nbsp;tell&nbsp;pickle&nbsp;how&nbsp;to&nbsp;decode&nbsp;8-bit&nbsp;string<br>
+instances&nbsp;pickled&nbsp;by&nbsp;Python&nbsp;2;&nbsp;these&nbsp;default&nbsp;to&nbsp;'ASCII'&nbsp;and&nbsp;'strict',<br>
+respectively.&nbsp;&nbsp;The&nbsp;*encoding*&nbsp;can&nbsp;be&nbsp;'bytes'&nbsp;to&nbsp;read&nbsp;these&nbsp;8-bit<br>
+string&nbsp;instances&nbsp;as&nbsp;bytes&nbsp;objects.</tt></dd></dl>
+ <dl><dt><a name="-load_data"><strong>load_data</strong></a>()</dt></dl>
+ <dl><dt><a name="-loads"><strong>loads</strong></a>(data, *, fix_imports=True, encoding='ASCII', errors='strict')</dt><dd><tt>Read&nbsp;and&nbsp;return&nbsp;an&nbsp;object&nbsp;from&nbsp;the&nbsp;given&nbsp;pickle&nbsp;data.<br>
+&nbsp;<br>
+The&nbsp;protocol&nbsp;version&nbsp;of&nbsp;the&nbsp;pickle&nbsp;is&nbsp;detected&nbsp;automatically,&nbsp;so&nbsp;no<br>
+protocol&nbsp;argument&nbsp;is&nbsp;needed.&nbsp;&nbsp;Bytes&nbsp;past&nbsp;the&nbsp;pickled&nbsp;object's<br>
+representation&nbsp;are&nbsp;ignored.<br>
+&nbsp;<br>
+Optional&nbsp;keyword&nbsp;arguments&nbsp;are&nbsp;*fix_imports*,&nbsp;*encoding*&nbsp;and&nbsp;*errors*,<br>
+which&nbsp;are&nbsp;used&nbsp;to&nbsp;control&nbsp;compatiblity&nbsp;support&nbsp;for&nbsp;pickle&nbsp;stream<br>
+generated&nbsp;by&nbsp;Python&nbsp;2.&nbsp;&nbsp;If&nbsp;*fix_imports*&nbsp;is&nbsp;True,&nbsp;pickle&nbsp;will&nbsp;try&nbsp;to<br>
+map&nbsp;the&nbsp;old&nbsp;Python&nbsp;2&nbsp;names&nbsp;to&nbsp;the&nbsp;new&nbsp;names&nbsp;used&nbsp;in&nbsp;Python&nbsp;3.&nbsp;&nbsp;The<br>
+*encoding*&nbsp;and&nbsp;*errors*&nbsp;tell&nbsp;pickle&nbsp;how&nbsp;to&nbsp;decode&nbsp;8-bit&nbsp;string<br>
+instances&nbsp;pickled&nbsp;by&nbsp;Python&nbsp;2;&nbsp;these&nbsp;default&nbsp;to&nbsp;'ASCII'&nbsp;and&nbsp;'strict',<br>
+respectively.&nbsp;&nbsp;The&nbsp;*encoding*&nbsp;can&nbsp;be&nbsp;'bytes'&nbsp;to&nbsp;read&nbsp;these&nbsp;8-bit<br>
+string&nbsp;instances&nbsp;as&nbsp;bytes&nbsp;objects.</tt></dd></dl>
+ <dl><dt><a name="-netflix_predict"><strong>netflix_predict</strong></a>(movie_id, customer_ids, movie_data, cust_data)</dt><dd><tt>Predicts&nbsp;ratings&nbsp;for&nbsp;one&nbsp;movie&nbsp;and&nbsp;a&nbsp;list&nbsp;of&nbsp;customer_ids<br>
+&nbsp;<br>
+Uses&nbsp;the&nbsp;customer_average,&nbsp;by&nbsp;year&nbsp;if&nbsp;a&nbsp;vailable,&nbsp;offset&nbsp;by&nbsp;the&nbsp;difference<br>
+between&nbsp;the&nbsp;average&nbsp;rating&nbsp;across&nbsp;the&nbsp;entire&nbsp;training_set&nbsp;and&nbsp;the&nbsp;average<br>
+rating&nbsp;for&nbsp;the&nbsp;movie.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;movie_id:&nbsp;A&nbsp;movie&nbsp;id&nbsp;number&nbsp;in&nbsp;string&nbsp;format,&nbsp;including&nbsp;a&nbsp;colon&nbsp;at&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;customer_ids:&nbsp;A&nbsp;list&nbsp;of&nbsp;customer_id's,&nbsp;again&nbsp;in&nbsp;string&nbsp;format.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;list&nbsp;of&nbsp;floats,&nbsp;the&nbsp;predicted&nbsp;ratings&nbsp;rounded&nbsp;to&nbsp;1/10th&nbsp;of&nbsp;a&nbsp;star<br>
+&nbsp;&nbsp;&nbsp;&nbsp;predicted.&nbsp;For&nbsp;example:<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;[3.0,&nbsp;3.4,&nbsp;4.0]</tt></dd></dl>
+ <dl><dt><a name="-netflix_print"><strong>netflix_print</strong></a>(movie_id, customer_ids, ratings, o_stream)</dt><dd><tt>Records&nbsp;predicted&nbsp;ratings&nbsp;for&nbsp;one&nbsp;movie&nbsp;and&nbsp;a&nbsp;list&nbsp;of&nbsp;customer_ids<br>
+&nbsp;<br>
+Writes&nbsp;the&nbsp;movie_id,&nbsp;colon&nbsp;included,&nbsp;to&nbsp;the&nbsp;output&nbsp;stream,&nbsp;then&nbsp;writes&nbsp;each<br>
+rating&nbsp;to&nbsp;the&nbsp;output&nbsp;stream,&nbsp;saving&nbsp;a&nbsp;(movie_id,&nbsp;customer_id,&nbsp;rating)&nbsp;tuple<br>
+for&nbsp;each&nbsp;as&nbsp;it&nbsp;goes.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;movie_id:&nbsp;A&nbsp;movie&nbsp;id&nbsp;number&nbsp;in&nbsp;string&nbsp;format,&nbsp;including&nbsp;a&nbsp;colon&nbsp;at&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;end.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;customer_ids:&nbsp;A&nbsp;list&nbsp;of&nbsp;customer_id's,&nbsp;again&nbsp;in&nbsp;string&nbsp;format.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ratings:&nbsp;A&nbsp;list&nbsp;of&nbsp;the&nbsp;ratings&nbsp;predicted&nbsp;for&nbsp;each&nbsp;customer.</tt></dd></dl>
+ <dl><dt><a name="-netflix_solve"><strong>netflix_solve</strong></a>(i_stream, o_stream)</dt><dd><tt>Creates&nbsp;prediction&nbsp;output&nbsp;for&nbsp;any&nbsp;valid&nbsp;input&nbsp;for&nbsp;the&nbsp;Netflix&nbsp;Prize<br>
+problem.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;i_stream:&nbsp;The&nbsp;input&nbsp;stream.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;o_stream:&nbsp;The&nbsp;output&nbsp;stream.</tt></dd></dl>
+ <dl><dt><a name="-print_rmse"><strong>print_rmse</strong></a>(o_stream)</dt><dd><tt>Creates&nbsp;a&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;(root&nbsp;mean&nbsp;squared&nbsp;error).<br>
+&nbsp;<br>
+Collates&nbsp;predicted&nbsp;and&nbsp;actual&nbsp;ratings,&nbsp;then&nbsp;prints&nbsp;a&nbsp;labeled&nbsp;line&nbsp;with&nbsp;the<br>
+rmse&nbsp;for&nbsp;all&nbsp;predicted&nbsp;ratings&nbsp;to&nbsp;the&nbsp;output&nbsp;stream.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;o_stream:&nbsp;A&nbsp;writer,&nbsp;the&nbsp;output&nbsp;stream.</tt></dd></dl>
+ <dl><dt><a name="-rmse"><strong>rmse</strong></a>(nums_1, nums_2)</dt><dd><tt>Calculates&nbsp;the&nbsp;root&nbsp;mean&nbsp;squared&nbsp;error&nbsp;between&nbsp;two&nbsp;iterable&nbsp;containers<br>
+of&nbsp;numbers.<br>
+&nbsp;<br>
+Requires&nbsp;numpy.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nums_1,&nbsp;nums_2:&nbsp;Two&nbsp;iterable&nbsp;containers&nbsp;of&nbsp;floats&nbsp;or&nbsp;integers.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;root&nbsp;mean&nbsp;squared&nbsp;error&nbsp;as&nbsp;a&nbsp;raw&nbsp;float&nbsp;value.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>ANSWER_PICKLE</strong> = 'cat3263-a.pickle'<br>
+<strong>CACHE_LOC</strong> = '/u/downing/public_html/netflix-caches/'<br>
+<strong>CACHE_URL</strong> = 'http://www.cs.utexas.edu/users/downing/netflix-caches/'<br>
+<strong>CUSTOMER_PICKLE</strong> = 'cat3263-cust-2.pickle'<br>
+<strong>MOVIE_PICKLE</strong> = 'cat3263-mov-2.pickle'<br>
+<strong>TRAINING_SET_AVG</strong> = 3.604289964420661<br>
+<strong>calculated_ratings</strong> = []<br>
+<strong>sqrt</strong> = &lt;ufunc 'sqrt'&gt;<br>
+<strong>square</strong> = &lt;ufunc 'square'&gt;<br>
+<strong>subtract</strong> = &lt;ufunc 'subtract'&gt;</td></tr></table>
+</body></html>

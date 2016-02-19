@@ -161,6 +161,10 @@ def sort_customer_file(customer_id):
 
 
 def customer_avg_by_year():
+    '''
+    returns a dictionary of the average rating from each year for each customer
+    {customer_id:{<year>:avg_that_year}}
+    '''
     release_years = load_pickle('amry') # all movie release years
     avgs = {}
     for entry in scandir(DATA_PATH + '/customer_data'):
@@ -200,6 +204,9 @@ def all_movie_release_years():
 
 
 def coalesce_movie_data():
+    '''
+    coalesce needed movie caches into a single one for runtime
+    '''
     amry = load_pickle('amry') # all movie release years
     avgmr = load_pickle('avgmr') # average movie ratings
 
@@ -211,6 +218,9 @@ def coalesce_movie_data():
 
 
 def coalesce_customer_data():
+    '''
+    coalesce needed customer caches into a single one for runtime
+    '''
     avgcr = load_pickle('avgcr') # average customer rating
     caby = load_pickle('caby')
 
