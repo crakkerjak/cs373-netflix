@@ -37,7 +37,7 @@ def avg_movie_rating(ratings):
     """
     s = 0.0
     for c in ratings:
-        s += ratings[c][0]
+        s += ratings[c]
     return s / len(ratings)
 
 
@@ -52,7 +52,7 @@ def fetch_ratings_for_movie(movie_id):
         next(lines)
         for l in lines:
             c, r, d = l.strip().split(',')
-            ratings[int(c)] = (int(r), d)
+            ratings[int(c)] = int(r)
         return ratings
 
 
@@ -161,7 +161,7 @@ def sort_customer_file(customer_id):
 
 
 def customer_avg_by_year():
-    release_years = load_pickle('amry')
+    release_years = load_pickle('amry') # all movie release years
     avgs = {}
     for entry in scandir(DATA_PATH + '/customer_data'):
         print(entry.name)
@@ -204,9 +204,9 @@ def coalesce_movie_data():
     avgmr = load_pickle('avgmr') # average movie ratings
 
     movie_data = {}
-    for m in range(1, 17771):
-        movie_data[m] = {'year':amry[m],
-                         'avgr':avgmr[m]}
+    for movie_id in range(1, 17771):
+        movie_data[movie_id] = {'year':amry[movie_id],
+                         'avgr':avgmr[movie_id]}
     return movie_data
 
 
@@ -234,11 +234,12 @@ def answers():
         for l in lines:
             l = l.strip()
             if l[-1] == ':': # line is a movie_id
-                movie_id = l[:-1]
+                movie_id = int(l[:-1])
                 ratings = fetch_ratings_for_movie(movie_id)
-                answers[movie_id + ':'] = {}
+                answers[movie_id] = {}
             else: # line is customer_id, add rating to dict
-                answers[movie_id + ':'][l] = ratings[int(l)][0]
+                customer_id = int(l)
+                answers[movie_id][customer_id] = ratings[customer_id]
     return answers
 
 
@@ -275,23 +276,23 @@ if __name__ == '__main__':
     if len(args) > 1:
         if '-m2c' in args:
             convert_training_set()
-        elif '-scf' in args:
+        if '-scf' in args:
             sort_all_customer_files()
-        elif '-amry' in args:
+        if '-amry' in args:
             write_pickle(all_movie_release_years(), 'amry')
-        elif '-avgmr' in args:
+        if '-avgmr' in args:
             write_pickle(all_avg_movie_ratings(), 'avgmr')
-        elif '-avgcr' in args:
+        if '-avgcr' in args:
             write_pickle(all_avg_customer_ratings(), 'avgcr')
-        elif '-caby' in args:
+        if '-caby' in args:
             write_pickle(customer_avg_by_year(), 'caby')
-        elif '-com' in args:
-            write_pickle(coalesce_movie_data(), 'mov')
-        elif '-coc' in args:
-            write_pickle(coalesce_customer_data(), 'cust')
-        elif '-a' in args:
+        if '-com' in args:
+            write_pickle(coalesce_movie_data(), 'mov-2')
+        if '-coc' in args:
+            write_pickle(coalesce_customer_data(), 'cust-2')
+        if '-a' in args:
             write_pickle(answers(), 'a')
-        elif '-test' in args:
+        if '-test' in args:
             fetch_ratings_for_movie(1)
         print('Done.')
     else:
