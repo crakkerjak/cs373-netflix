@@ -54,17 +54,16 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
         # but this one gets 0.90 :)
         # ratings.append(cust_data[int(customer_id)]['caby'][movie_data[int(movie_id[:-1])]['year']])
         # ---------------------------------------------------------------------
+        # ---------------------------------------------------------------------
+        # and these get 0.83309598542714313751
         movie_id = int(movie_id)
         year = movie_data[movie_id]['year']
-        customer_average_that_year = cust_data[int(customer_id)]['caby'][year]
         if year != -1:
-            caby = customer_average_that_year
+            customer_average = cust_data[int(customer_id)]['caby'][year]
         else:
-            caby = movie_data[movie_id]['avgr']
-        # time to beat: 50/50 or 70/30 at 0.8562 on probe.txt
-        ratings.append(0.50 * caby +
-                       0.50 * movie_data[movie_id]['avgr']) # now replace this with 'maby'
-                    #    0.30 * cust_data[customer_id]['avgr'])
+            customer_average = cust_data[customer_id]['avgr'] # was movie_data[movie_id]['avgr'] - same result
+        ratings.append(customer_average +
+                       movie_data[movie_id]['avgr'] - TRAINING_SET_AVG)
     return ratings
 
 
@@ -115,7 +114,7 @@ def print_rmse(o_stream):
 
     # calculate, format and output rmse
     error = rmse(data[0], data[1])
-    o_stream.write('RMSE: ' + '{:.20f}'.format(error) + '\n')
+    o_stream.write('RMSE: ' + '{:.2f}'.format(error) + '\n')
 
 
 def rmse (nums_1, nums_2) :

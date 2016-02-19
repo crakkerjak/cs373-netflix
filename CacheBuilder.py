@@ -206,7 +206,7 @@ def coalesce_movie_data():
     movie_data = {}
     for movie_id in range(1, 17771):
         movie_data[movie_id] = {'year':amry[movie_id],
-                         'avgr':avgmr[movie_id]}
+                                'avgr':avgmr[movie_id]}
     return movie_data
 
 
