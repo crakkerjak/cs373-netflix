@@ -55,14 +55,21 @@ def netflix_predict(movie_id, customer_ids, movie_data, cust_data):
         # ratings.append(cust_data[customer_id]['caby'][movie_data[movie_id]['year']])
         # ---------------------------------------------------------------------
         # ---------------------------------------------------------------------
-        # and these get 0.83309598542714313751
+        # and these get 0.83
         release_year = movie_data[movie_id]['year']
-        if release_year != -1: # release year was NULL in training_set
+        if release_year != -1: # release year was not NULL in movie_titles.txt
             customer_average = cust_data[customer_id]['caby'][release_year]
         else:
-            customer_average = cust_data[customer_id]['avgr']
-        ratings.append(customer_average +
-                       movie_data[movie_id]['avgr'] - TRAINING_SET_AVG)
+            customer_average = movie_data[movie_id]['avgr']
+
+        rating = (customer_average +
+                 movie_data[movie_id]['avgr'] - TRAINING_SET_AVG)
+        # final checks bring it down to 0.82352249980624048220
+        if rating > 5:
+            rating = 5.0
+        elif rating < 1:
+            rating = 1.0
+        ratings.append(rating)
     return ratings
 
 
@@ -88,7 +95,7 @@ def netflix_print(movie_id, customer_ids, ratings, o_stream):
         calculated_ratings.append((movie_id, customer_id, float(rating)))
 
 
-def print_rmse(o_stream):
+def print_rmse(o_stream, ratings, answers):
     """Creates a string representation of the (root mean squared error).
 
     Collates predicted and actual ratings, then prints a labeled line with the
@@ -96,23 +103,18 @@ def print_rmse(o_stream):
 
     Args:
         o_stream: A writer, the output stream.
+        answers: a dict of ratings {movie_id:{customer_id:rating}}
     """
-    # read in answers
-    answers = {}
-    if isfile(CACHE_LOC + ANSWER_PICKLE):
-        with open(CACHE_LOC + ANSWER_PICKLE, 'rb') as answer_file:
-            answers = load(answer_file)
-    else:
-        answers = loads(urlopen(CACHE_URL + ANSWER_PICKLE).read())
 
     # format data for rmse calculation
-    data = ([],[])
-    for movie_id, customer_id, rating in calculated_ratings:
-         data[0].append(rating)
-         data[1].append(answers[int(movie_id)][int(customer_id)])
+    calculated = []
+    actual = []
+    for movie_id, customer_id, rating in ratings:
+         calculated.append(rating)
+         actual.append(answers[movie_id][customer_id])
 
     # calculate, format and output rmse
-    error = rmse(data[0], data[1])
+    error = rmse(calculated, actual)
     o_stream.write('RMSE: ' + '{:.2f}'.format(error) + '\n')
 
 
@@ -132,8 +134,12 @@ def rmse (nums_1, nums_2) :
 
 
 def load_data():
-    movie_data = {}
-    cust_data = {}
+    """Loads movie_data, cust_data, and answers from pickles.
+
+    Returns:
+        The tuple (movie_data, cust_data, answers) with the objects loaded from
+        their pickles.
+    """
     # load movie data cache
     if isfile(CACHE_LOC + MOVIE_PICKLE):
         with open(CACHE_LOC + MOVIE_PICKLE, 'rb') as movie_file:
@@ -146,7 +152,13 @@ def load_data():
             cust_data = load(cust_file)
     else:
         cust_data = loads(urlopen(CACHE_URL + CUSTOMER_PICKLE).read())
-    return(movie_data, cust_data)
+    # load answers
+    if isfile(CACHE_LOC + ANSWER_PICKLE):
+        with open(CACHE_LOC + ANSWER_PICKLE, 'rb') as answer_file:
+            answers = load(answer_file)
+    else:
+        answers = loads(urlopen(CACHE_URL + ANSWER_PICKLE).read())
+    return(movie_data, cust_data, answers)
 
 
 def netflix_solve(i_stream, o_stream):
@@ -162,7 +174,7 @@ def netflix_solve(i_stream, o_stream):
     assert hasattr(o_stream, 'write')
 
     customer_ids = []
-    movie_data, cust_data = load_data()
+    movie_data, cust_data, answers = load_data()
     # parse input
     for line in i_stream:
         line = line.strip()
@@ -182,4 +194,4 @@ def netflix_solve(i_stream, o_stream):
                                   movie_data, cust_data)
     # print final movie's output
     netflix_print(movie_id, customer_ids, predictions, o_stream)
-    print_rmse(o_stream)
+    print_rmse(o_stream, calculated_ratings, answers)

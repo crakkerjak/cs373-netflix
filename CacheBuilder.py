@@ -106,6 +106,7 @@ def all_avg_customer_ratings():
     """
     avg_ratings = {}
     for entry in scandir(DATA_PATH + '/customer_data'):
+        print(entry.name)
         c = int(entry.name[2:9])
         avg_ratings[c] = avg_customer_rating(c)
     return avg_ratings
@@ -116,11 +117,11 @@ def avg_customer_rating(customer_id):
     ratings a dict: {movie_id:(rating, date)}
     return the average rating from a customer rating dict
     """
-    s = 0.0
+    r_sum = 0.0
     ratings = fetch_ratings_for_customer(customer_id)
-    for m, r in ratings.items():
-        s += ratings[m][0]
-    return s / len(ratings)
+    for rating, _ in ratings.items():
+        r_sum += rating
+    return r_sum / len(ratings)
 
 
 def fetch_ratings_for_customer(customer_id):
@@ -131,9 +132,8 @@ def fetch_ratings_for_customer(customer_id):
               + '.txt','r') as cf:
         ratings = {}
         for l in cf.readlines():
-            print(l)
-            m, r, d = l.strip().split(',')
-            ratings[int(m)] = (int(r), d)
+            movie_id, rating, date = l.strip().split(',')
+            ratings[int(movie_id)] = (int(rating), date)
     return ratings
 
 
@@ -173,7 +173,7 @@ def customer_avg_by_year():
         with open(entry.path,'r') as cf:
             ratings = {}
             for l in cf.readlines():
-                movie_id, rating, _ = l.strip().split(',')
+                movie_id, rating, _ = l.split(',')
                 rating = int(rating)
                 year = release_years[int(movie_id)]
                 if year in ratings:
