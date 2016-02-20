@@ -44,7 +44,11 @@ map&nbsp;the&nbsp;old&nbsp;Python&nbsp;2&nbsp;names&nbsp;to&nbsp;the&nbsp;new&nb
 instances&nbsp;pickled&nbsp;by&nbsp;Python&nbsp;2;&nbsp;these&nbsp;default&nbsp;to&nbsp;'ASCII'&nbsp;and&nbsp;'strict',<br>
 respectively.&nbsp;&nbsp;The&nbsp;*encoding*&nbsp;can&nbsp;be&nbsp;'bytes'&nbsp;to&nbsp;read&nbsp;these&nbsp;8-bit<br>
 string&nbsp;instances&nbsp;as&nbsp;bytes&nbsp;objects.</tt></dd></dl>
- <dl><dt><a name="-load_data"><strong>load_data</strong></a>()</dt></dl>
+ <dl><dt><a name="-load_data"><strong>load_data</strong></a>()</dt><dd><tt>Loads&nbsp;movie_data,&nbsp;cust_data,&nbsp;and&nbsp;answers&nbsp;from&nbsp;pickles.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;tuple&nbsp;(movie_data,&nbsp;cust_data,&nbsp;answers)&nbsp;with&nbsp;the&nbsp;objects&nbsp;loaded&nbsp;from<br>
+&nbsp;&nbsp;&nbsp;&nbsp;their&nbsp;pickles.</tt></dd></dl>
  <dl><dt><a name="-loads"><strong>loads</strong></a>(data, *, fix_imports=True, encoding='ASCII', errors='strict')</dt><dd><tt>Read&nbsp;and&nbsp;return&nbsp;an&nbsp;object&nbsp;from&nbsp;the&nbsp;given&nbsp;pickle&nbsp;data.<br>
 &nbsp;<br>
 The&nbsp;protocol&nbsp;version&nbsp;of&nbsp;the&nbsp;pickle&nbsp;is&nbsp;detected&nbsp;automatically,&nbsp;so&nbsp;no<br>
@@ -92,13 +96,14 @@ problem.<br>
 Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;i_stream:&nbsp;The&nbsp;input&nbsp;stream.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;o_stream:&nbsp;The&nbsp;output&nbsp;stream.</tt></dd></dl>
- <dl><dt><a name="-print_rmse"><strong>print_rmse</strong></a>(o_stream)</dt><dd><tt>Creates&nbsp;a&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;(root&nbsp;mean&nbsp;squared&nbsp;error).<br>
+ <dl><dt><a name="-print_rmse"><strong>print_rmse</strong></a>(o_stream, ratings, answers)</dt><dd><tt>Creates&nbsp;a&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;(root&nbsp;mean&nbsp;squared&nbsp;error).<br>
 &nbsp;<br>
 Collates&nbsp;predicted&nbsp;and&nbsp;actual&nbsp;ratings,&nbsp;then&nbsp;prints&nbsp;a&nbsp;labeled&nbsp;line&nbsp;with&nbsp;the<br>
 rmse&nbsp;for&nbsp;all&nbsp;predicted&nbsp;ratings&nbsp;to&nbsp;the&nbsp;output&nbsp;stream.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;o_stream:&nbsp;A&nbsp;writer,&nbsp;the&nbsp;output&nbsp;stream.</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;o_stream:&nbsp;A&nbsp;writer,&nbsp;the&nbsp;output&nbsp;stream.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;answers:&nbsp;a&nbsp;dict&nbsp;of&nbsp;ratings&nbsp;{movie_id:{customer_id:rating}}</tt></dd></dl>
  <dl><dt><a name="-rmse"><strong>rmse</strong></a>(nums_1, nums_2)</dt><dd><tt>Calculates&nbsp;the&nbsp;root&nbsp;mean&nbsp;squared&nbsp;error&nbsp;between&nbsp;two&nbsp;iterable&nbsp;containers<br>
 of&nbsp;numbers.<br>
 &nbsp;<br>
