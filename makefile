@@ -73,6 +73,6 @@ RunNetflix.tmp: RunNetflix.in RunNetflix.out RunNetflix.py
 	# diff RunNetflix.tmp RunNetflix.out
 
 TestNetflix.tmp: TestNetflix.py
-	coverage3 run    --branch TestNetflix.py >  TestNetflix.tmp 2>&1
+	coverage3 run --branch TestNetflix.py > TestNetflix.tmp 2>&1
 	coverage3 report -m --omit='/usr/lib/python3.4/site-packages/*','/home/travis/virtualenv/python3.4.2/lib/python3.4/site-packages/*','/usr/local/lib/python3.5/site-packages/*' >> TestNetflix.tmp
 	cat TestNetflix.tmp

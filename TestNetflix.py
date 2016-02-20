@@ -9,17 +9,18 @@
 # -------
 # imports
 # -------
-from io import TextIOBase
 from io import StringIO
-from unittest import main, \
-                     TestCase
+from unittest import \
+    main, \
+    TestCase
 
-from Netflix import rmse, \
-                    print_rmse, \
-                    netflix_predict, \
-                    netflix_print, \
-                    load_data, \
-                    netflix_solve
+from Netflix import \
+    rmse, \
+    print_rmse, \
+    netflix_predict, \
+    netflix_print, \
+    load_data, \
+    netflix_solve
 
 TRAINING_SET_AVG = 3.604289964420661
 
